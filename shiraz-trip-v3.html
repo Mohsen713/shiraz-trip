@@ -1,0 +1,635 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<title>سفر شیراز ۱۴۰۵</title>
+<link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg:#f7f6f2; --bg2:#ffffff; --surface:#f0ede8; --surface2:#e8e4de;
+  --border:rgba(0,0,0,0.07); --border2:rgba(0,0,0,0.13);
+  --text:#1a1916; --text2:#6b6860; --text3:#a8a59e;
+  --green:#2d9e6b; --green-bg:#edf7f2; --green-light:#c8e9d8;
+  --amber:#b8720e; --amber-bg:#fdf3e4;
+  --blue:#1e5cb8; --blue-bg:#ebf1fb;
+  --purple:#5c38a8; --purple-bg:#eeebf9;
+  --pink:#a82858; --pink-bg:#faebf2;
+  --red:#b82828; --red-bg:#fdeaea;
+  --shadow:0 1px 4px rgba(0,0,0,0.08),0 1px 2px rgba(0,0,0,0.04);
+  --shadow-md:0 4px 16px rgba(0,0,0,0.1),0 2px 4px rgba(0,0,0,0.05);
+  --hdr-bg:#ffffff;
+}
+body.dark {
+  --bg:#111118; --bg2:#1c1c28; --surface:#252535; --surface2:#2e2e42;
+  --border:rgba(255,255,255,0.07); --border2:rgba(255,255,255,0.13);
+  --text:#e8e8f2; --text2:#9898b8; --text3:#5a5a7a;
+  --green:#3dbe80; --green-bg:rgba(61,190,128,0.12); --green-light:rgba(61,190,128,0.25);
+  --amber:#e09030; --amber-bg:rgba(224,144,48,0.12);
+  --blue:#5080e0; --blue-bg:rgba(80,128,224,0.12);
+  --purple:#9070e0; --purple-bg:rgba(144,112,224,0.12);
+  --pink:#e06090; --pink-bg:rgba(224,96,144,0.12);
+  --red:#e05050; --red-bg:rgba(224,80,80,0.12);
+  --shadow:0 1px 4px rgba(0,0,0,0.25),0 1px 2px rgba(0,0,0,0.15);
+  --shadow-md:0 4px 20px rgba(0,0,0,0.35),0 2px 6px rgba(0,0,0,0.2);
+  --hdr-bg:#1c1c28;
+}
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+html,body{height:100%;font-family:'Vazirmatn',sans-serif;background:var(--bg);color:var(--text);direction:rtl;transition:background 0.3s,color 0.3s}
+body{max-width:480px;margin:0 auto;overflow-x:hidden}
+
+/* HEADER */
+.hdr{background:var(--hdr-bg);padding:14px 16px 0;border-bottom:1px solid var(--border);position:sticky;top:0;z-index:200;transition:background 0.3s,border-color 0.3s}
+.hdr-top{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:12px;gap:8px}
+.hdr-title{font-size:19px;font-weight:700;color:var(--text);letter-spacing:-0.5px}
+.hdr-sub{font-size:10px;color:var(--text3);margin-top:3px}
+.hdr-actions{display:flex;align-items:center;gap:8px;flex-shrink:0}
+
+/* CLOCK WIDGET */
+.clock-widget{background:var(--surface);border-radius:12px;padding:10px 14px;margin-bottom:10px;display:flex;align-items:center;justify-content:space-between;gap:10px}
+.clock-left{}
+.clock-time{font-size:28px;font-weight:700;color:var(--text);letter-spacing:-1px;font-variant-numeric:tabular-nums;line-height:1}
+.clock-date{font-size:10px;color:var(--text3);margin-top:3px;font-weight:500}
+.clock-right{flex:1;text-align:left;min-width:0}
+.clock-status{font-size:11px;font-weight:600;padding:4px 10px;border-radius:20px;display:inline-block;margin-bottom:5px;white-space:nowrap}
+.status-ahead{background:var(--green-bg);color:var(--green)}
+.status-behind{background:var(--red-bg);color:var(--red)}
+.status-on{background:var(--amber-bg);color:var(--amber)}
+.status-done{background:var(--blue-bg);color:var(--blue)}
+.clock-next{font-size:11px;color:var(--text2);line-height:1.4}
+.clock-next strong{color:var(--text);font-weight:600}
+
+/* PROGRESS RING */
+.pct-ring{position:relative;width:42px;height:42px;flex-shrink:0}
+.pct-ring svg{transform:rotate(-90deg)}
+.ring-bg{fill:none;stroke:var(--surface2);stroke-width:3}
+.ring-fill{fill:none;stroke:var(--green);stroke-width:3;stroke-linecap:round;transition:stroke-dashoffset 0.5s cubic-bezier(.4,0,.2,1)}
+.pct-num{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;color:var(--green)}
+
+/* STATS */
+.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;margin-bottom:10px}
+.stat{background:var(--surface);border-radius:10px;padding:8px;text-align:center}
+.stat-n{font-size:19px;font-weight:700;color:var(--text);line-height:1}
+.stat-l{font-size:9px;color:var(--text3);margin-top:2px;font-weight:500}
+
+/* FILTERS */
+.filters{display:flex;gap:6px;overflow-x:auto;padding-bottom:10px;-webkit-overflow-scrolling:touch;scrollbar-width:none}
+.filters::-webkit-scrollbar{display:none}
+.fbtn{flex-shrink:0;padding:5px 12px;font-size:11px;font-family:'Vazirmatn',sans-serif;font-weight:600;border-radius:20px;cursor:pointer;border:1px solid var(--border2);background:var(--bg2);color:var(--text2);transition:all 0.15s;white-space:nowrap}
+.fbtn.active{background:var(--text);color:var(--bg2);border-color:var(--text)}
+.fbtn:active{opacity:0.7}
+
+/* ICON BTNS */
+.icon-btn{width:34px;height:34px;border-radius:9px;background:var(--surface);border:1px solid var(--border);display:flex;align-items:center;justify-content:center;cursor:pointer;transition:background 0.15s;color:var(--text2);flex-shrink:0}
+.icon-btn:active{background:var(--surface2)}
+
+/* CONTENT */
+.content{padding:10px 12px 110px}
+
+/* DAY */
+.day{margin-bottom:10px;border-radius:14px;overflow:hidden;background:var(--bg2);box-shadow:var(--shadow);transition:background 0.3s}
+.day-hdr{padding:11px 14px;display:flex;align-items:center;justify-content:space-between;cursor:pointer;user-select:none;transition:background 0.12s}
+.day-hdr:active{background:var(--surface)}
+.day-l{display:flex;align-items:center;gap:9px;min-width:0}
+.dot{width:8px;height:8px;border-radius:50%;flex-shrink:0}
+.dbadge{font-size:9px;font-weight:600;padding:2px 7px;border-radius:8px;display:inline-block;margin-bottom:3px}
+.dname{font-size:13px;font-weight:600;color:var(--text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.day-r{display:flex;align-items:center;gap:7px;flex-shrink:0}
+.dcnt{font-size:11px;color:var(--text3);font-weight:500}
+.dcomplete{font-size:9px;background:var(--green-bg);color:var(--green);border:1px solid var(--green-light);padding:2px 8px;border-radius:8px;font-weight:600}
+.chev{width:15px;height:15px;color:var(--text3);transition:transform 0.22s;flex-shrink:0}
+.chev.o{transform:rotate(180deg)}
+.day-pb{height:2px;background:var(--surface)}
+.day-pb-fill{height:2px;transition:width 0.4s ease}
+
+/* ITEMS */
+.items-list{border-top:1px solid var(--border)}
+.item{display:flex;align-items:flex-start;gap:10px;padding:12px 14px;border-bottom:1px solid var(--border);cursor:pointer;user-select:none;transition:background 0.1s}
+.item:last-child{border-bottom:none}
+.item:active{background:var(--surface)}
+.item.done .ititle{text-decoration:line-through;color:var(--text3)}
+.item.done .idesc,.item.done .itime{color:var(--text3)}
+.item.hidden{display:none}
+.cb{width:22px;height:22px;border-radius:7px;border:1.5px solid var(--border2);flex-shrink:0;margin-top:1px;display:flex;align-items:center;justify-content:center;transition:all 0.2s;background:transparent}
+.cb.ck{background:var(--green);border-color:var(--green)}
+.cb svg{display:none}
+.cb.ck svg{display:block}
+.ibody{flex:1;min-width:0}
+.ititle{font-size:13px;font-weight:500;color:var(--text);line-height:1.4}
+.idesc{font-size:11px;color:var(--text2);margin-top:3px;line-height:1.6}
+.itime{font-size:10px;color:var(--text3);font-weight:600;margin-top:4px}
+.tags{display:flex;flex-wrap:wrap;gap:3px;margin-top:6px}
+.tag{font-size:9px;font-weight:600;padding:2px 7px;border-radius:7px}
+.t-food{background:var(--green-bg);color:var(--green)}
+.t-sight{background:var(--blue-bg);color:var(--blue)}
+.t-walk{background:var(--purple-bg);color:var(--purple)}
+.t-travel{background:var(--surface);color:var(--text2)}
+.t-relax{background:var(--amber-bg);color:var(--amber)}
+.t-shop{background:var(--pink-bg);color:var(--pink)}
+.t-warn{background:var(--red-bg);color:var(--red);font-weight:700}
+.detail-btn{padding:4px 10px;font-size:10px;font-family:'Vazirmatn',sans-serif;font-weight:600;border-radius:8px;background:var(--surface);border:1px solid var(--border);color:var(--text2);cursor:pointer;margin-top:6px;white-space:nowrap;flex-shrink:0;transition:background 0.15s}
+.detail-btn:active{background:var(--surface2)}
+.has-note-dot{display:inline-block;width:6px;height:6px;border-radius:50%;background:var(--amber);margin-right:4px;vertical-align:middle}
+
+/* DRAWER */
+.overlay{position:fixed;inset:0;background:rgba(0,0,0,0.4);z-index:300;opacity:0;pointer-events:none;transition:opacity 0.25s}
+.overlay.open{opacity:1;pointer-events:all}
+.drawer{position:fixed;bottom:0;left:50%;transform:translateX(-50%) translateY(101%);width:100%;max-width:480px;background:var(--bg2);border-radius:20px 20px 0 0;z-index:400;transition:transform 0.32s cubic-bezier(.32,.72,0,1);max-height:90vh;display:flex;flex-direction:column;box-shadow:0 -6px 40px rgba(0,0,0,0.15)}
+.drawer.open{transform:translateX(-50%) translateY(0)}
+.drawer-handle{width:36px;height:4px;background:var(--surface2);border-radius:2px;margin:12px auto 0;flex-shrink:0}
+.dscroll{overflow-y:auto;padding:16px 18px 48px;flex:1;-webkit-overflow-scrolling:touch}
+
+.dw-img-wrap{width:100%;height:200px;border-radius:14px;overflow:hidden;margin-bottom:16px;background:var(--surface);display:flex;align-items:center;justify-content:center}
+.dw-img-wrap img{width:100%;height:100%;object-fit:cover}
+.dw-img-placeholder{font-size:13px;color:var(--text3);text-align:center}
+
+.dw-tags{display:flex;flex-wrap:wrap;gap:4px;margin-bottom:8px}
+.dw-title{font-size:18px;font-weight:700;color:var(--text);line-height:1.3;margin-bottom:4px}
+.dw-time-badge{display:inline-flex;align-items:center;gap:5px;background:var(--surface);padding:4px 10px;border-radius:20px;font-size:11px;font-weight:600;color:var(--text2);margin-bottom:14px}
+.dw-section{margin-bottom:18px}
+.dw-sec-title{font-size:10px;font-weight:700;color:var(--text3);text-transform:uppercase;letter-spacing:0.8px;margin-bottom:8px}
+.dw-desc{font-size:13px;color:var(--text2);line-height:1.75}
+.dw-extra{font-size:12px;color:var(--text2);line-height:1.75;margin-top:8px;padding-top:8px;border-top:1px solid var(--border)}
+
+.map-btn{display:flex;align-items:center;gap:10px;background:var(--surface);border-radius:12px;padding:12px 14px;text-decoration:none;color:var(--text);transition:background 0.15s}
+.map-btn:active{background:var(--surface2)}
+.map-icon{width:34px;height:34px;background:var(--blue-bg);border-radius:9px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.map-label{font-size:12px;font-weight:500}
+.map-addr{font-size:10px;color:var(--text3);margin-top:1px}
+.map-arr{margin-right:auto;color:var(--text3)}
+
+.note-area{width:100%;min-height:90px;padding:11px 13px;font-family:'Vazirmatn',sans-serif;font-size:13px;color:var(--text);background:var(--surface);border:1px solid var(--border);border-radius:11px;resize:none;outline:none;line-height:1.65;direction:rtl;transition:border-color 0.15s}
+.note-area::placeholder{color:var(--text3)}
+.note-area:focus{border-color:var(--green)}
+.note-hint{font-size:10px;color:var(--text3);margin-top:5px}
+.note-hint.saved{color:var(--green)}
+
+.dw-done-btn{width:100%;padding:14px;font-family:'Vazirmatn',sans-serif;font-size:14px;font-weight:600;border-radius:13px;cursor:pointer;border:none;margin-top:6px;transition:all 0.2s}
+.dw-done-btn.undone{background:var(--green);color:#fff}
+.dw-done-btn.isdone{background:var(--surface2);color:var(--text2)}
+.dw-done-btn:active{opacity:0.8}
+
+/* BOTTOM BAR */
+.btmbar{position:fixed;bottom:0;left:50%;transform:translateX(-50%);width:100%;max-width:480px;background:var(--hdr-bg);border-top:1px solid var(--border);padding:10px 12px;padding-bottom:max(10px,env(safe-area-inset-bottom));display:flex;gap:8px;z-index:100;box-shadow:0 -4px 20px rgba(0,0,0,0.06);transition:background 0.3s}
+.btn{flex:1;padding:11px;font-family:'Vazirmatn',sans-serif;font-size:12px;font-weight:600;border-radius:10px;cursor:pointer;border:1px solid var(--border2);background:var(--surface);color:var(--text2);transition:all 0.15s}
+.btn:active{opacity:0.75}
+.btn-green{background:var(--green);color:#fff;border-color:var(--green)}
+
+@keyframes up{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
+.day{animation:up 0.3s ease both}
+.day:nth-child(1){animation-delay:0s}.day:nth-child(2){animation-delay:.04s}.day:nth-child(3){animation-delay:.08s}.day:nth-child(4){animation-delay:.12s}.day:nth-child(5){animation-delay:.16s}
+</style>
+</head>
+<body>
+
+<div class="hdr">
+  <div class="hdr-top">
+    <div>
+      <div class="hdr-title">سفر شیراز ۱۴۰۵</div>
+      <div class="hdr-sub">۱۷ تا ۲۰ اردیبهشت</div>
+    </div>
+    <div class="hdr-actions">
+      <div class="pct-ring">
+        <svg width="42" height="42" viewBox="0 0 42 42">
+          <circle class="ring-bg" cx="21" cy="21" r="17"/>
+          <circle class="ring-fill" id="ring-fill" cx="21" cy="21" r="17" stroke-dasharray="107" stroke-dashoffset="107"/>
+        </svg>
+        <div class="pct-num" id="pct">۰٪</div>
+      </div>
+      <div class="icon-btn" onclick="toggleDark()" title="تغییر تم">
+        <svg id="theme-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
+      </div>
+    </div>
+  </div>
+
+  <div class="clock-widget">
+    <div class="clock-left">
+      <div class="clock-time" id="clock-time">--:--</div>
+      <div class="clock-date" id="clock-date"></div>
+    </div>
+    <div class="clock-right">
+      <div class="clock-status" id="clock-status">در حال بارگذاری...</div>
+      <div class="clock-next" id="clock-next"></div>
+    </div>
+  </div>
+
+  <div class="stats">
+    <div class="stat"><div class="stat-n" id="sd">0</div><div class="stat-l">انجام شده</div></div>
+    <div class="stat"><div class="stat-n" id="sl">0</div><div class="stat-l">باقیمانده</div></div>
+    <div class="stat"><div class="stat-n" id="st">0</div><div class="stat-l">کل آیتم</div></div>
+  </div>
+
+  <div class="filters">
+    <button class="fbtn active" onclick="setFilter('all',this)">همه</button>
+    <button class="fbtn" onclick="setFilter('food',this)">غذا</button>
+    <button class="fbtn" onclick="setFilter('sight',this)">دیدنی</button>
+    <button class="fbtn" onclick="setFilter('walk',this)">پیاده</button>
+    <button class="fbtn" onclick="setFilter('travel',this)">رفت‌وآمد</button>
+    <button class="fbtn" onclick="setFilter('relax',this)">ریلکس</button>
+    <button class="fbtn" onclick="setFilter('shop',this)">خرید</button>
+    <button class="fbtn" onclick="setFilter('warn',this)">مهم</button>
+  </div>
+</div>
+
+<div class="content" id="content"></div>
+
+<div class="btmbar">
+  <button class="btn" onclick="resetAll()">پاک کردن</button>
+  <button class="btn btn-green" id="expbtn" onclick="toggleAll()">باز کردن همه</button>
+</div>
+
+<div class="overlay" id="overlay" onclick="closeDrawer()"></div>
+<div class="drawer" id="drawer">
+  <div class="drawer-handle"></div>
+  <div class="dscroll" id="drawer-content"></div>
+</div>
+
+<script>
+const PHOTOS={
+  i11:'https://upload.wikimedia.org/wikipedia/commons/thumb/8/85/Ash_reshteh.jpg/640px-Ash_reshteh.jpg',
+  i12:'https://upload.wikimedia.org/wikipedia/commons/thumb/e/e2/Vakil_Bazaar_in_Shiraz_02.jpg/640px-Vakil_Bazaar_in_Shiraz_02.jpg',
+  i13:'https://upload.wikimedia.org/wikipedia/commons/thumb/8/8e/Vakil_caravanserai_Shiraz.jpg/640px-Vakil_caravanserai_Shiraz.jpg',
+  i15:'https://upload.wikimedia.org/wikipedia/commons/thumb/5/5c/Arg_of_Karim_Khan%2C_Shiraz_-_panoramio_%281%29.jpg/640px-Arg_of_Karim_Khan%2C_Shiraz_-_panoramio_%281%29.jpg',
+  i16:'https://upload.wikimedia.org/wikipedia/commons/thumb/a/a6/Zand_Street_Shiraz.jpg/640px-Zand_Street_Shiraz.jpg',
+  i18:'https://upload.wikimedia.org/wikipedia/commons/thumb/2/2c/Hafez_Shrine%2C_Shiraz%2C_Iran.jpg/640px-Hafez_Shrine%2C_Shiraz%2C_Iran.jpg',
+  i23:'https://upload.wikimedia.org/wikipedia/commons/thumb/f/f6/Iran_Persepolis_Apadana_Eaststairs.jpg/640px-Iran_Persepolis_Apadana_Eaststairs.jpg',
+  i24:'https://upload.wikimedia.org/wikipedia/commons/thumb/6/69/Naqsh-e_Rostam_general_view.jpg/640px-Naqsh-e_Rostam_general_view.jpg',
+  i26:'https://upload.wikimedia.org/wikipedia/commons/thumb/2/2e/Cyrus_the_Great%27s_tomb_at_Pasargadae.jpg/640px-Cyrus_the_Great%27s_tomb_at_Pasargadae.jpg',
+  i32:'https://upload.wikimedia.org/wikipedia/commons/thumb/e/e0/Saadi_Tomb_Shiraz.jpg/640px-Saadi_Tomb_Shiraz.jpg',
+  i37:'https://upload.wikimedia.org/wikipedia/commons/thumb/1/1e/Faloodeh.jpg/640px-Faloodeh.jpg',
+  i41:'https://upload.wikimedia.org/wikipedia/commons/thumb/7/71/Nasir_al-Molk_mosque.jpg/640px-Nasir_al-Molk_mosque.jpg',
+};
+
+const MAPS={
+  i12:{label:'بازار وکیل',addr:'بازار وکیل، شیراز',url:'https://maps.google.com/?q=بازار+وکیل+شیراز'},
+  i13:{label:'سرای وکیل / رستوران شرزه',addr:'سرای وکیل، شیراز',url:'https://maps.google.com/?q=سرای+وکیل+شیراز'},
+  i15:{label:'ارگ کریم‌خان',addr:'میدان شهرداری، شیراز',url:'https://maps.google.com/?q=ارگ+کریم+خان+شیراز'},
+  i17:{label:'رستوران باکویه',addr:'روبروی هفت‌خوان، شیراز',url:'https://maps.google.com/?q=رستوران+باکویه+شیراز'},
+  i18:{label:'حافظیه',addr:'بلوار حافظ، شیراز',url:'https://maps.google.com/?q=حافظیه+شیراز'},
+  i23:{label:'تخت‌جمشید',addr:'مرودشت، استان فارس',url:'https://maps.google.com/?q=تخت+جمشید'},
+  i24:{label:'نقش‌رستم',addr:'نزدیک مرودشت، فارس',url:'https://maps.google.com/?q=نقش+رستم'},
+  i26:{label:'پاسارگاد',addr:'دشت مرغاب، استان فارس',url:'https://maps.google.com/?q=پاسارگاد'},
+  i31:{label:'محله قصرالدشت',addr:'قصرالدشت، شمال شرق شیراز',url:'https://maps.google.com/?q=قصرالدشت+شیراز'},
+  i32:{label:'آرامگاه سعدی',addr:'بلوار بوستان، شیراز',url:'https://maps.google.com/?q=آرامگاه+سعدی+شیراز'},
+  i37:{label:'فالوده پشت ارگ',addr:'کنار ارگ کریم‌خان، شیراز',url:'https://maps.google.com/?q=فالوده+کریمخان+شیراز'},
+  i41:{label:'مسجد نصیرالملک',addr:'خیابان لطفعلی‌خان زند، شیراز',url:'https://maps.google.com/?q=مسجد+نصیرالملک+شیراز'},
+};
+
+const EXTRA={
+  i11:'آش سبزی شیرازی با ترکیب سبزیجات معطر محلی، لوبیا، و لیموی تازه‌ای که درست سر میز فشار می‌دهی پخته می‌شود — بوی لیمو روی بخار آش یکی از خاطره‌انگیزترین لحظه‌های صبحانه در شیراز است. بهترین آش‌خانه‌ها معمولاً اواخر صبح تمام می‌کنند، پس زیاد دیر نکنید.',
+  i12:'بازار وکیل که در دوران کریم‌خان زند (قرن هجدهم) ساخته شده، یکی از کامل‌ترین بازارهای تاریخی ایران است. سقف‌های آجری گنبدی نور را به شکل خاصی می‌پراکنند. راسته‌های مختلف شامل ادویه، قالی، مس‌کاری و پارچه است. حمام وکیل داخل مجموعه را حتماً ببینید — حوض مرمر وسط آن معروف است. سرای مشیر هم یک حیاط آرام با رستوران‌هاست.',
+  i13:'رستوران شرزه یکی از معدود رستوران‌هایی است که غذاهای فراموش‌شده شیرازی را دوباره زنده کرده. قنبر پلو (برنج با گوشت چرخ‌کرده، کشمش و ادویه) نامش از «قنبر» غلام امیرالمومنین گرفته شده. شیرازی پلو ترکیب برنج با سبزیجات محلی و گوشت است. ظرفیت محدود دارد — رزرو تلفنی از شب قبل الزامی است.',
+  i15:'ارگ کریم‌خان (۱۱۸۰ هجری قمری) هم مسکونی بود و هم نظامی. برج‌های گرد گوشه‌ها، برج کج جنوب شرقی (که سینه دیوار را خم کرده) و حیاط مرکزی با باغچه و استخر از ویژگی‌های معماری‌اش است. نارنجستان قوام خانه‌ای قاجاری است با باغ پر از درخت نارنج — بوی بهارنارنج اردیبهشت اینجا بی‌نظیر است.',
+  i16:'خیابان زند محور اصلی تاریخی شیراز است. از میدان نمازی به سمت جنوب، معماری دوران مختلف کنار هم است. به زیرگذر پل کابلی (پل ولیعصر) که می‌رسید، دیوارنگاری‌های جالب و فضای خیابانی پرانرژی دارد. غروب روی پل ایستادن و دیدن روشنایی شهر تجربه دیدنی است.',
+  i18:'آرامگاه حافظ در اصل فقط یک سنگ مزار ساده بود. بنای امروزی با ستون‌های مرمر و سقف طلایی را علی‌اصغر حکمت در دهه ۱۳۳۰ طراحی کرد. سنگ مزار با ابیاتی از دیوان حافظ کنده‌کاری شده. رسم تفأل به حافظ اینجا زنده‌ترین است — از نگهبانان بخواهید کتاب دیوان را برایتان باز کنند.',
+  i23:'تخت‌جمشید که داریوش اول در ۵۱۸ پیش از میلاد پایه‌گذاری کرد، پایتخت مراسمی هخامنشیان بود نه اداری. سالانه در نوروز هیأت‌هایی از سراسر امپراتوری اینجا می‌آمدند. سنگ‌نگاره‌های پلکان آپادانا تصویر همین هیأت‌هاست. آتش‌سوزی اسکندر ۳۳۰ پیش از میلاد بخش عمده‌ای را سوخت ولی آنچه مانده هنوز حیرت‌آور است.',
+  i24:'نقش‌رستم شامل چهار آرامگاه داریوش اول، خشایارشا، اردشیر اول و داریوش دوم است که صلیب‌وار روی کوه کنده شده‌اند. کعبه زرتشت در برابرشان بنایی مکعبی از سنگ سفید است که کاربردش هنوز محل بحث است. نقش‌برجسته‌های ساسانی پایین‌تر پیروزی‌های شاپور اول و اردشیر بابکان را نشان می‌دهند.',
+  i26:'پاسارگاد اولین پایتخت هخامنشیان و مکان آرامگاه کوروش بزرگ است. آرامگاه کوروش با معماری ساده اما باشکوه — شش پله سنگی و اتاقکی کوچک — جهانیان را به شگفتی وا می‌دارد. بقایای کاخ‌های دروازه، بار و اختصاصی در دشت پراکنده‌اند. نوشته معروف «ای انسان، هر که هستی...» بر دیوار اتاقک آرامگاه منسوب به کوروش است.',
+  i32:'سعدی شیرازی (۱۲۱۰–۱۲۹۱ میلادی) یکی از بزرگترین شاعران جهان است. گلستان و بوستان او به ده‌ها زبان ترجمه شده. باغ سعدیه با چشمه و استخر و سرو‌های قدیمی یکی از آرام‌بخش‌ترین فضاهای شیراز است. سنگ مزار از مرمر سرخ است با ابیاتی از بوستان به خط نستعلیق.',
+  i37:'فالوده از نشاسته و آب گلاب و شیره انگور درست می‌شود — یخ خرد شده‌ای که در دهان آب می‌شود. شیرازی‌ها آن را با آبلیمو و گاهی شربت آلبالو می‌خورند. فالوده پشت ارگ که روی چرخ دستی سرو می‌شود از قدیمی‌ترین و اصیل‌ترین‌هاست.',
+  i41:'مسجد نصیرالملک (۱۸۸۸ میلادی) به «مسجد صورتی» معروف است چون کاشی‌های صورتی رنگ خاص آن. ولی شهرتش بیشتر از شیشه‌های رنگین ایوان جنوبی است — صبح‌ها نور از پنجره‌های آبی، قرمز، زرد و سبز رنگ می‌گیرد و فرش‌ها را به تابلوهای نور تبدیل می‌کند. این پدیده حدود یک ساعت بعد از طلوع آفتاب اتفاق می‌افتد.',
+};
+
+const D=[
+  {id:'d0',dot:'#4a7cf5',badge:'پنجشنبه ۱۶',bb:'rgba(74,124,245,0.1)',bc:'#4a7cf5',name:'حرکت از تهران',
+   dayIndex:0,
+   items:[
+    {id:'i01',time:'۱۸:۴۰',timeH:18,timeM:40,title:'رسیدن به ایستگاه و سوار شدن قطار',desc:'مدارک، بار و بلیط چک باشد. قطار تهران–شیراز حدود ۱۵ ساعت است.',tags:['travel']},
+    {id:'i02',time:'شب',timeH:20,timeM:0,title:'استراحت در قطار به سمت شیراز',desc:'فردا روز پر برنامه‌ایه — خوب بخوابید.',tags:['relax']},
+  ]},
+  {id:'d1',dot:'#2d9e6b',badge:'جمعه ۱۷',bb:'rgba(45,158,107,0.1)',bc:'#2d9e6b',name:'ورود + بافت تاریخی',
+   dayIndex:1,
+   items:[
+    {id:'i10',time:'۱۰:۱۵',timeH:10,timeM:15,title:'ورود به شیراز — اسنپ به هتل شیرازیس',desc:'بار را هتل نگه دارد. هتل شیرازیس ابتدای خیابان مکتبی است. چک‌این از ساعت ۱۴.',tags:['travel']},
+    {id:'i11',time:'۱۱:۰۰',timeH:11,timeM:0,title:'آش سبزی با لیموی تازه',desc:'صبحانه دیر — توصیه ویژه دوست شیرازی.',tags:['food']},
+    {id:'i12',time:'۱۱:۴۵',timeH:11,timeM:45,title:'بازار وکیل + حمام وکیل + سرای مشیر',desc:'تا ۲۱:۳۰ باز است. بازار وکیل از دوره زندیه، یکی از زیباترین بازارهای ایران. حمام وکیل و سرای مشیر داخل مجموعه‌اند.',tags:['walk','sight']},
+    {id:'i13',time:'۱۳:۳۰',timeH:13,timeM:30,title:'ناهار رستوران شرزه — قنبر پلو یا شیرازی پلو',desc:'سرای وکیل، فقط ناهار سرو می‌کند. رزرو از قبل الزامی است! قنبر پلو و شیرازی پلو از غذاهای اصیل شیرازی هستند.',tags:['food','warn']},
+    {id:'i14',time:'۱۴:۰۰',timeH:14,timeM:0,title:'چک‌این هتل + استراحت',desc:'دوش و استراحت کوتاه برای انرژی بعدازظهر.',tags:['relax']},
+    {id:'i15',time:'۱۵:۳۰',timeH:15,timeM:30,title:'ارگ کریم‌خان + نارنجستان قوام',desc:'ارگ تا ۲۰، نارنجستان تا ۱۹. ارگ از آثار دوره زندیه با برج‌های گرد. نارنجستان قوام خانه‌ای قاجاری با باغ نارنج معطر.',tags:['sight']},
+    {id:'i16',time:'۱۷:۳۰',timeH:17,timeM:30,title:'پیاده‌روی خیابان زند → پل کابلی',desc:'از میدان نمازی به سمت جنوب تا پل کابلی (پل ولیعصر). حدود ۲ کیلومتر. بافت قدیمی در طول مسیر.',tags:['walk']},
+    {id:'i17',time:'۱۹:۳۰',timeH:19,timeM:30,title:'شام رستوران باکویه',desc:'روبروی هفت‌خوان، ویوی شبانه شیراز از بالا. کیفیت از هفت‌خوان بهتر است.',tags:['food']},
+    {id:'i18',time:'۲۱:۰۰',timeH:21,timeM:0,title:'حافظیه در شب',desc:'تا ۲۲ باز است. آرامگاه خواجه حافظ در میان باغی سرسبز. شب جمعه در حافظیه شاعرانه‌ترین تجربه شیراز است.',tags:['sight','relax']},
+  ]},
+  {id:'d2',dot:'#c47a1a',badge:'شنبه ۱۸',bb:'rgba(196,122,26,0.1)',bc:'#c47a1a',name:'تخت‌جمشید + پاسارگاد',
+   dayIndex:2,
+   items:[
+    {id:'i20',time:'شب قبل',timeH:22,timeM:0,title:'رزرو تور روزانه تخت‌جمشید',desc:'پذیراگشت (ابتدای رودکی از زند) یا آریاپارس. تور شامل راهنما، رفت‌وآمد و ناهار بومگردی است. تا ۱۰ شب قبل می‌توان رزرو کرد.',tags:['travel','warn']},
+    {id:'i21',time:'۰۸:۳۰',timeH:8,timeM:30,title:'صبحانه هتل',desc:'خوب بخورید — روز پر تحرکی در پیش دارید.',tags:['food']},
+    {id:'i22',time:'۰۹:۱۵',timeH:9,timeM:15,title:'حرکت با تور به سمت تخت‌جمشید',desc:'کلاه، آفتاب‌گیر و آب فراموش نشود. مسیر حدود ۹۰ دقیقه است.',tags:['travel']},
+    {id:'i23',time:'۱۰:۳۰',timeH:10,timeM:30,title:'بازدید تخت‌جمشید (۲.۵–۳ ساعت)',desc:'باز ۸ تا ۱۸. پایتخت مراسمی هخامنشیان، ۲۵۰۰ سال تاریخ. کاخ دروازه ملل، کاخ صد ستون، کاخ تچر و خزانه.',tags:['sight']},
+    {id:'i24',time:'۱۳:۳۰',timeH:13,timeM:30,title:'نقش‌رستم (۴۵–۶۰ دقیقه)',desc:'۱۵ دقیقه از تخت‌جمشید. مقابر داریوش، خشایارشا و دیگر شاهان هخامنشی روی کوه. کعبه زرتشت هم اینجاست.',tags:['sight']},
+    {id:'i25',time:'۱۵:۰۰',timeH:15,timeM:0,title:'ناهار در اقامتگاه بومگردی کنار پاسارگاد',desc:'غذای سنتی محلی — معمولاً جزء پکیج تور است.',tags:['food']},
+    {id:'i26',time:'۱۶:۰۰',timeH:16,timeM:0,title:'بازدید پاسارگاد — آرامگاه کوروش',desc:'بلیط تا ۱۷:۳۰. پایتخت اول هخامنشیان. آرام‌تر و کمتر شلوغ از تخت‌جمشید.',tags:['sight']},
+    {id:'i27',time:'۱۷:۳۰',timeH:17,timeM:30,title:'بازگشت به شیراز (~۲ ساعت)',desc:'تور شما را درب هتل می‌رساند.',tags:['travel']},
+    {id:'i28',time:'۲۰:۰۰',timeH:20,timeM:0,title:'شام سبک — سرای آناهیتا یا ایران‌مهر',desc:'امشب خسته‌اید. سرای آناهیتا فضای آرام سنتی دارد. ایران‌مهر هتل + رستوران محلی است.',tags:['food']},
+  ]},
+  {id:'d3',dot:'#6040b0',badge:'یک‌شنبه ۱۹',bb:'rgba(96,64,176,0.1)',bc:'#6040b0',name:'قصرالدشت + سعدیه + گردش',
+   dayIndex:3,
+   items:[
+    {id:'i30',time:'۰۸:۳۰',timeH:8,timeM:30,title:'صبحانه هتل',desc:'دیروز خسته بودید. آروم شروع کنید.',tags:['food']},
+    {id:'i31',time:'۰۹:۳۰',timeH:9,timeM:30,title:'اکتشاف محله قصرالدشت',desc:'شمال شرق شیراز. خانه‌های کاهگلی، کوچه‌های باریک و بافت سنتی. با اسنپ برید، بعد ۱.۵–۲ کیلومتر پیاده بگردید.',tags:['walk','sight']},
+    {id:'i32',time:'۱۱:۰۰',timeH:11,timeM:0,title:'سعدیه — آرامگاه سعدی',desc:'تا ۱۹:۳۰ باز. آرامگاه شیخ مصلح‌الدین سعدی در میان باغی سرسبز با استخر و چشمه.',tags:['sight','walk']},
+    {id:'i33',time:'۱۲:۳۰',timeH:12,timeM:30,title:'پیاده‌راه سلامت بلوار چمران',desc:'ریلکس و قدم زدن در سایه درختان. یکی از خوشایندترین بلوارهای شیراز.',tags:['walk','relax']},
+    {id:'i34',time:'۱۳:۳۰',timeH:13,timeM:30,title:'ناهار شرزه — کلم‌پلو',desc:'این بار کلم‌پلو را امتحان کنید — غذای اصیل شیرازی.',tags:['food']},
+    {id:'i35',time:'۱۵:۳۰',timeH:15,timeM:30,title:'خیابان انوری — ته‌لنجی + عمارت منصوری + برگر ۱۱۰',desc:'مرکز ته‌لنجی‌فروشی‌های شیراز. عمارت منصوری اینجاست. برگر ۱۱۰ معروف است.',tags:['shop','food']},
+    {id:'i36',time:'۱۷:۰۰',timeH:17,timeM:0,title:'کتابفروشی شیراز — پل مالی‌آباد، ساختمان الف',desc:'سر پل مالی‌آباد. طبقه بالا فودکورت کوچکی با فینگر فود دارد.',tags:['shop','relax']},
+    {id:'i37',time:'۱۸:۳۰',timeH:18,timeM:30,title:'فالوده شیرازی پشت ارگ',desc:'اصیل‌ترین فالوده شیراز. با لیموترش تازه.',tags:['food']},
+    {id:'i38',time:'۲۰:۰۰',timeH:20,timeM:0,title:'شام شب آخر — آناهیتا یا باکویه',desc:'شب آخر در شیراز — یک شام خوب.',tags:['food']},
+  ]},
+  {id:'d4',dot:'#c03030',badge:'دوشنبه ۲۰',bb:'rgba(192,48,48,0.1)',bc:'#c03030',name:'صبح آزاد + حرکت به تهران',
+   dayIndex:4,
+   items:[
+    {id:'i40',time:'۰۸:۳۰',timeH:8,timeM:30,title:'صبحانه هتل + جمع کردن چمدان',desc:'چک‌اوت ساعت ۱۲.',tags:['food']},
+    {id:'i41',time:'۱۰:۰۰',timeH:10,timeM:0,title:'مسجد نصیرالملک — مسجد صورتی',desc:'صبح بهترین نور رنگی را از شیشه‌های رنگارنگ دارد. ۸ تا ۱۲:۳۰ باز است. هر چه زودتر بروید عکس بهتری می‌گیرید.',tags:['sight']},
+    {id:'i42',time:'۱۲:۰۰',timeH:12,timeM:0,title:'چک‌اوت هتل',desc:'بار را هتل نگه دارد تا وقت قطار.',tags:['travel']},
+    {id:'i43',time:'۱۲:۳۰',timeH:12,timeM:30,title:'پاچینی یا شاورمای لبنانی',desc:'آخرین غذای شیرازی قبل از برگشت.',tags:['food']},
+    {id:'i44',time:'۱۳:۰۰',timeH:13,timeM:0,title:'اسنپ به ایستگاه قطار',desc:'۲ ساعت قبل از حرکت حرکت کنید — ترافیک شیراز گاهی غافلگیر می‌کند.',tags:['travel']},
+    {id:'i45',time:'۱۵:۰۵',timeH:15,timeM:5,title:'حرکت قطار به سمت تهران',desc:'ورود به تهران ۰۶:۲۰ صبح سه‌شنبه.',tags:['travel']},
+  ]},
+];
+
+// Trip days mapping (Jalali 1405): day 0=16th Thursday, 1=17th Friday, 2=18th Saturday, 3=19th Sunday, 4=20th Monday
+const TRIP_START = new Date(2026, 4, 6); // May 6 = 16 Ordibehesht 1405 (Thursday)
+
+const TL={food:'غذا',sight:'دیدنی',walk:'پیاده',travel:'رفت‌وآمد',relax:'ریلکس',shop:'خرید',warn:'مهم'};
+const SK='shiraz_v4';
+let ck={}, od={}, notes={}, allOpen=false, curFilter='all', curItem=null, isDark=false;
+
+function load(){
+  try{
+    const d=JSON.parse(localStorage.getItem(SK));
+    if(d){ck=d.ck||{};od=d.od||{};notes=d.notes||{};isDark=!!d.dark;}
+  }catch(e){}
+  D.forEach(d=>{if(od[d.id]===undefined)od[d.id]=false});
+  if(!Object.keys(ck).length)od[D[0].id]=true;
+  if(isDark)document.body.classList.add('dark');
+}
+function save(){
+  try{localStorage.setItem(SK,JSON.stringify({ck,od,notes,dark:isDark}))}catch(e){}
+}
+
+function toggleDark(){
+  isDark=!isDark;
+  document.body.classList.toggle('dark',isDark);
+  const icon=document.getElementById('theme-icon');
+  if(isDark){
+    icon.innerHTML='<path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z" fill="none" stroke="currentColor" stroke-width="2"/>';
+  } else {
+    icon.innerHTML='<circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/>';
+  }
+  save();
+}
+
+// CLOCK & STATUS
+function persianNum(n){
+  return String(n).replace(/[0-9]/g,d=>'۰۱۲۳۴۵۶۷۸۹'[d]);
+}
+function pad2(n){return String(n).padStart(2,'0')}
+
+function getCurrentDayIndex(){
+  const now=new Date();
+  const diff=Math.floor((now-TRIP_START)/(1000*60*60*24));
+  return diff; // -1 = before trip, 0-4 = trip days, 5+ = after trip
+}
+
+function getScheduleStatus(){
+  const now=new Date();
+  const dayIdx=getCurrentDayIndex();
+
+  // Not trip time
+  if(dayIdx<0){
+    const msLeft=TRIP_START-now;
+    const daysLeft=Math.ceil(msLeft/(1000*60*60*24));
+    return {
+      status:'ahead',
+      statusText:'قبل از سفر',
+      next:'تا شروع سفر: '+persianNum(daysLeft)+' روز مانده'
+    };
+  }
+  if(dayIdx>4){
+    return {status:'done',statusText:'سفر تمام شد',next:'خاطرات شیراز ماندگار است'};
+  }
+
+  const day=D[dayIdx];
+  if(!day) return {status:'on',statusText:'در سفر',next:''};
+
+  const nowMins=now.getHours()*60+now.getMinutes();
+
+  // Find items for today
+  const todayItems=day.items.filter(i=>typeof i.timeH==='number');
+
+  // Count done vs expected by now
+  let expectedDone=0, actualDone=0, nextItem=null;
+  for(const it of todayItems){
+    const itemMins=it.timeH*60+it.timeM;
+    if(itemMins<=nowMins){
+      expectedDone++;
+      if(ck[it.id]) actualDone++;
+    } else {
+      if(!nextItem) nextItem=it;
+    }
+  }
+
+  let status, statusText;
+  if(expectedDone===0){
+    status='on'; statusText='برنامه شروع نشده';
+  } else {
+    const ratio=actualDone/expectedDone;
+    if(ratio>=1){status='ahead';statusText='جلو از برنامه';}
+    else if(ratio>=0.6){status='on';statusText='روی برنامه';}
+    else{status='behind';statusText='عقب از برنامه';}
+  }
+
+  let nextText='';
+  if(nextItem){
+    nextText='بعدی: <strong>'+nextItem.title+'</strong> — '+nextItem.time;
+  } else {
+    nextText='برنامه امروز تمام شد';
+  }
+
+  return {status,statusText,next:nextText};
+}
+
+function updateClock(){
+  const now=new Date();
+  const h=pad2(now.getHours()), m=pad2(now.getMinutes());
+  document.getElementById('clock-time').textContent=persianNum(parseInt(h))+':'+persianNum(parseInt(m));
+
+  const days=['یک‌شنبه','دوشنبه','سه‌شنبه','چهارشنبه','پنج‌شنبه','جمعه','شنبه'];
+  const months=['فروردین','اردیبهشت','خرداد','تیر','مرداد','شهریور','مهر','آبان','آذر','دی','بهمن','اسفند'];
+  // Simple date display
+  document.getElementById('clock-date').textContent=days[now.getDay()]+' — اردیبهشت ۱۴۰۵';
+
+  const s=getScheduleStatus();
+  const statusEl=document.getElementById('clock-status');
+  statusEl.className='clock-status status-'+s.status;
+  statusEl.textContent=s.statusText;
+  document.getElementById('clock-next').innerHTML=s.next;
+}
+
+setInterval(updateClock,1000);
+updateClock();
+
+function setFilter(f,el){
+  curFilter=f;
+  document.querySelectorAll('.fbtn').forEach(b=>b.classList.remove('active'));
+  el.classList.add('active');
+  render();
+}
+
+function render(){
+  const c=document.getElementById('content'); c.innerHTML='';
+  let td=0,ta=0;
+  D.forEach(day=>{
+    const vis=day.items.filter(i=>curFilter==='all'||i.tags.includes(curFilter));
+    if(!vis.length)return;
+    const dd=day.items.filter(i=>ck[i.id]).length,dt=day.items.length;
+    td+=dd; ta+=dt;
+    const io=!!od[day.id],comp=dd===dt;
+    const pct=dt?Math.round(dd/dt*100):0;
+
+    const sec=document.createElement('div'); sec.className='day';
+    sec.innerHTML=`
+      <div class="day-hdr" onclick="tDay('${day.id}')">
+        <div class="day-l">
+          <div class="dot" style="background:${day.dot}"></div>
+          <div>
+            <div class="dbadge" style="background:${day.bb};color:${day.bc}">${day.badge}</div>
+            <div class="dname">${day.name}</div>
+          </div>
+        </div>
+        <div class="day-r">
+          ${comp?'<span class="dcomplete">✓ تمام</span>':`<span class="dcnt">${dd}/${dt}</span>`}
+          <svg class="chev ${io?'o':''}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>
+        </div>
+      </div>
+      <div class="day-pb"><div class="day-pb-fill" style="width:${pct}%;background:${day.dot}"></div></div>
+      ${io?`<div class="items-list">${vis.map(it=>{
+        const done=!!ck[it.id];
+        const hasNote=!!(notes[it.id]&&notes[it.id].trim());
+        const tgs=it.tags.map(t=>`<span class="tag t-${t}">${TL[t]}</span>`).join('');
+        return `<div class="item ${done?'done':''}" onclick="tItem('${it.id}')">
+          <div class="cb ${done?'ck':''}">
+            <svg width="11" height="9" viewBox="0 0 11 9" fill="none">
+              <polyline points="1,4.5 4,7.5 10,1" stroke="white" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </div>
+          <div class="ibody">
+            <div class="ititle">${hasNote?'<span class="has-note-dot"></span>':''}${it.title}</div>
+            <div class="idesc">${it.desc}</div>
+            <div class="itime">${it.time}</div>
+            <div class="tags">${tgs}</div>
+            <button class="detail-btn" onclick="event.stopPropagation();openDrawer('${it.id}')">جزئیات بیشتر ›</button>
+          </div>
+        </div>`;}).join('')}</div>` : ''}`;
+    c.appendChild(sec);
+  });
+
+  const p=ta?Math.round(td/ta*100):0;
+  document.getElementById('sd').textContent=td;
+  document.getElementById('sl').textContent=ta-td;
+  document.getElementById('st').textContent=ta;
+  const C=107;
+  document.getElementById('ring-fill').style.strokeDashoffset=C-(p/100*C);
+  document.getElementById('pct').textContent=p+'٪';
+}
+
+function tDay(id){od[id]=!od[id];save();render()}
+function tItem(id){ck[id]=!ck[id];save();render();if(curItem===id)updateDoneBtn()}
+
+function openDrawer(id){
+  curItem=id;
+  const day=D.find(d=>d.items.find(i=>i.id===id));
+  const item=day.items.find(i=>i.id===id);
+  const map=MAPS[id], photo=PHOTOS[id], extra=EXTRA[id], done=!!ck[id], note=notes[id]||'';
+  const tgs=item.tags.map(t=>`<span class="tag t-${t}">${TL[t]}</span>`).join('');
+
+  let imgH='';
+  if(photo){
+    imgH=`<div class="dw-img-wrap"><img src="${photo}" alt="${item.title}" onerror="this.parentElement.innerHTML='<div class=\\'dw-img-placeholder\\'>تصویر در دسترس نیست</div>'"/></div>`;
+  }
+
+  let mapH='';
+  if(map){
+    mapH=`<div class="dw-section">
+      <div class="dw-sec-title">نقشه و آدرس</div>
+      <a class="map-btn" href="${map.url}" target="_blank">
+        <div class="map-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg></div>
+        <div><div class="map-label">${map.label}</div><div class="map-addr">${map.addr}</div></div>
+        <svg class="map-arr" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"/></svg>
+      </a>
+    </div>`;
+  }
+
+  document.getElementById('drawer-content').innerHTML=`
+    ${imgH}
+    <div class="dw-tags">${tgs}</div>
+    <div class="dw-title">${item.title}</div>
+    <div class="dw-time-badge">
+      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+      ${item.time}
+    </div>
+    <div class="dw-section">
+      <div class="dw-sec-title">توضیحات</div>
+      <div class="dw-desc">${item.desc}${extra?`<div class="dw-extra">${extra}</div>`:''}</div>
+    </div>
+    ${mapH}
+    <div class="dw-section">
+      <div class="dw-sec-title">یادداشت شخصی</div>
+      <textarea class="note-area" id="note-inp" placeholder="یادداشت، شماره تلفن، نکته شخصی..."
+        oninput="autoSaveNote('${id}')">${note}</textarea>
+      <div class="note-hint" id="note-hint">خودکار ذخیره می‌شود</div>
+    </div>
+    <button class="dw-done-btn ${done?'isdone':'undone'}" id="dw-done-btn" onclick="tItem('${id}')">
+      ${done?'برداشتن علامت انجام‌شده':'علامت انجام‌شده بزن'}
+    </button>`;
+
+  document.getElementById('overlay').classList.add('open');
+  document.getElementById('drawer').classList.add('open');
+  document.body.style.overflow='hidden';
+}
+
+function updateDoneBtn(){
+  const btn=document.getElementById('dw-done-btn');
+  if(!btn||!curItem)return;
+  const done=!!ck[curItem];
+  btn.className='dw-done-btn '+(done?'isdone':'undone');
+  btn.textContent=done?'برداشتن علامت انجام‌شده':'علامت انجام‌شده بزن';
+}
+
+let noteSaveTimer=null;
+function autoSaveNote(id){
+  clearTimeout(noteSaveTimer);
+  noteSaveTimer=setTimeout(()=>{
+    const el=document.getElementById('note-inp');
+    if(el){notes[id]=el.value;save();
+      const h=document.getElementById('note-hint');
+      if(h){h.textContent='ذخیره شد ✓';h.classList.add('saved');
+        setTimeout(()=>{h.textContent='خودکار ذخیره می‌شود';h.classList.remove('saved');},1500);}
+    }
+  },600);
+}
+
+function closeDrawer(){
+  const el=document.getElementById('note-inp');
+  if(el&&curItem){notes[curItem]=el.value;save();}
+  document.getElementById('overlay').classList.remove('open');
+  document.getElementById('drawer').classList.remove('open');
+  document.body.style.overflow='';
+  curItem=null; render();
+}
+
+function resetAll(){if(confirm('همه تیک‌ها پاک بشن؟')){ck={};save();render()}}
+function toggleAll(){
+  allOpen=!allOpen;
+  D.forEach(d=>{od[d.id]=allOpen});
+  document.getElementById('expbtn').textContent=allOpen?'بستن همه':'باز کردن همه';
+  save();render();
+}
+
+load(); render();
+</script>
+</body>
+</html>
